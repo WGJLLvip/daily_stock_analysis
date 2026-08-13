@@ -17,7 +17,8 @@ jobs:
 
       - name: 安装项目依赖库
         run: |
-          pip install akshare requests python-dotenv tushare baostock yfinance
+          pip install --upgrade pip
+          pip install akshare requests python-dotenv tushare baostock yfinance pydantic -i https://pypi.tuna.tsinghua.edu.cn/simple
 
       - name: 执行股票分析脚本
         env:
