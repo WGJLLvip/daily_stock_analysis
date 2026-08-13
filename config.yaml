@@ -1,0 +1,22 @@
+#大模型配置
+llm:
+  model_name: "deepseek-chat"   #openai则改为 gpt-3.5-turbo / gpt‑4o
+  api_key: "${{ secrets.LLM_API_KEY }}"  #不要填真实key，引用刚刚的secret
+  base_url: "${{ secrets.LLM_BASE_URL }}"
+
+#股票列表：填写你要分析的股票代码，A股6位数字
+stock_codes:
+  - "600026"
+  - "601868"
+  #可以自行增加删减股票代码
+
+#分析输出设置
+output:
+  save_markdown: true   #是否生成markdown报告
+  save_html: true       #是否生成网页版报告
+  mail_report: false    #不需要邮件推送保持false，如需邮件还要额外配置secret邮箱密钥
+
+#调度时间：GitHub Actions时区是UTC，比北京时间晚8小时
+schedule:
+  run_time: "0 7 * * 1-5" 
+  #上面cron含义：UTC每周一到周五早上7点执行 → 北京时间15点（交易日收盘后）
