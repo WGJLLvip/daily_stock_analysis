@@ -1,29 +1,34 @@
 name: Daily Stock Analysis
 on:
   schedule:
-    - cron: '0 8 * * 1-5' # UTC8点=北京时间16点，工作日盘后执行
-  workflow_dispatch: #支持手动测试运行
+    - cron: '0 8 * * 1-5'  # UTC8点=北京时间16点，工作日自动执行
+  workflow_dispatch: # 支持手动点按钮运行测试
 jobs:
-  run_analysis:
+  run_task:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: 配置Python环境
+      - name: 拉取仓库代码
+        uses: actions/checkout@v4
+
+      - name: 配置Python3.11环境
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: 安装依赖库
+
+      - name: 安装项目依赖库
         run: |
           pip install akshare requests python-dotenv tushare baostock yfinance
-      - name: 执行分析脚本
+
+      - name: 执行股票分析脚本
         env:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
           MODEL_NAME: ${{ secrets.MODEL_NAME }}
           TRADING_DAY_CHECK_ENABLED: ${{ secrets.TRADING_DAY_CHECK_ENABLED }}
         run: python main.py
-      - name: 打包报告文件
+
+      - name: 打包分析报告
         uses: actions/upload-artifact@v4
         with:
-          name: stock_analysis_report
+          name: stock_report_result
           path: ./output/
